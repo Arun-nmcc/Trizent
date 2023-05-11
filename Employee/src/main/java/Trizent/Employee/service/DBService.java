@@ -4,12 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import Trizent.Employee.connnection.Connections;
@@ -84,9 +86,11 @@ public class DBService {
 		// TODO Auto-generated method stub
 		//System.out.println(id1+empid+id2);
 		String sql = "UPDATE Address SET  line1=?, line2=?, city=?, state=?, country=?, zipcode=? WHERE employeeId ='"+empid+"'AND id ='"+id1+"'";
-
+//System.out.println(id1+id2+empid);
+		int i =0;
 		try {
 			for (Address add : addresses) {
+			//	System.out.println("update loop check");
 
 				connection = conn.getConnection();
 				 pstmt = connection.prepareStatement(sql);
@@ -99,12 +103,13 @@ public class DBService {
 					
 					
 				 
-				int i = pstmt.executeUpdate();
+				 i = pstmt.executeUpdate();
 				sql = "UPDATE Address SET  line1=?, line2=?, city=?, state=?, country=?, zipcode=? WHERE employeeId ='"+empid+"'AND id ='"+id2+"'";
 			//	System.out.println(i);
-				if(i>0)
-					return true;
+				
 			}
+			if(i>0)
+				return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +119,7 @@ public class DBService {
 
 	}
 
-	public boolean createEmployee(Employee employee) {
+	public boolean createEmployee(Employee employee) throws SQLIntegrityConstraintViolationException  {
 
 		String empsql = "insert into employee(name,email) values('" + employee.getName() + "','" + employee.getEmail()
 				+ "')";
@@ -157,9 +162,13 @@ public class DBService {
 
 			}
 
-		} catch (Exception e) {
+		} catch ( SQLException e) {
 			e.printStackTrace();
-			System.out.println("exception");
+			System.out.println("exception code"+e.getErrorCode());
+			 if (e.getErrorCode() == 1062) { 
+				 // 1062 is the error code for duplicate key value violation
+		            throw new SQLIntegrityConstraintViolationException("Email already exists");
+		        }
 			return false;
 		}
 

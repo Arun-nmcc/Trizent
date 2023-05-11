@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
- <%@include file="Header.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@include file="Header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,15 +14,16 @@
 
 	<form method="POST" action="create">
 		<label for="name">Name:</label> <input type="text" name="name"><br>
-		<label for="email">Email:</label> <input type="text" name="email"><br>
+		<label for="email">Email:</label> <input type="text" name="email">
+		<c:if test="${not empty errorMessage}">
+    ${errorMessage}<br>
+</c:if>
 		<label for="phone">Phone:</label> <input type="text" name="phone"><br>
 		<h2>Permanent Address</h2>
-		
-		<input
-			type="hidden" value="permanentAddressType"
+
+		<input type="hidden" value="permanentAddressType"
 			name="permanentAddressType"> <label
-			for="permanentAddressLine1">Address Line 1:</label> 
-			<input
+			for="permanentAddressLine1">Address Line 1:</label> <input
 			type="text" name="permanentAddressLine1"><br> <label
 			for="permanentAddressLine2">Address Line 2:</label> <input
 			type="text" name="permanentAddressLine2"><br> <label
@@ -32,10 +35,9 @@
 			for="permanentZipcode">Zipcode:</label> <input type="text"
 			name="permanentZipcode"><br>
 		<h2>Correspondence Address</h2>
-		<input
-			type="hidden" value="CorrespondenceAddressType"
-			name="correspondenceAddressType">
-		 <label for="correspondenceAddressLine1">Address Line 1:</label> <input
+		<input type="hidden" value="CorrespondenceAddressType"
+			name="correspondenceAddressType"> <label
+			for="correspondenceAddressLine1">Address Line 1:</label> <input
 			type="text" name="correspondenceAddressLine1"><br> <label
 			for="correspondenceAddressLine2">Address Line 2:</label> <input
 			type="text" name="correspondenceAddressLine2"><br> <label
