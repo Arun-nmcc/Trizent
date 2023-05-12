@@ -4,10 +4,14 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -74,7 +78,19 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "create")
-	public String create1(@ModelAttribute("employee") Employee employee, Model model) {
+	public String create1(@Valid @ModelAttribute("employee")  Employee employee,BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			List<ObjectError> allErrors = bindingResult.getAllErrors();
+			for (ObjectError objectError : allErrors) {
+				//System.out.println(objectError.getDefaultMessage());
+			//	System.out.println(objectErrobjectError.getArguments();
+				//System.out.println(objectError.getObjectName());
+				
+				
+				
+			}model.addAttribute("errors", allErrors);
+			return "createEmployee";
+		}
 		System.out.println(employee.getEmail());
 		System.out.println(employee.getAddress());
 		try {

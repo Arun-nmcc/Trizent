@@ -14,14 +14,19 @@
     <table>
         <tr>
             <td>Name:</td>
-            <td><input type="text" name="name" value="${employee.name}" /></td>
+            <td><input type="text" name="name" value="${employee.name}" />
+            </td>
         </tr>
         <tr>
             <td>Email:</td>
             <td><input type="text" name="email" value="${employee.email}" />
-            <c:if test="${not empty errorMessage}">
+                <c:if test="${not empty errorMessage}">
     ${errorMessage}<br>
-</c:if></td>
+</c:if><br>
+<c:forEach items="${errors}" var="error">
+${error.defaultMessage}<br>
+</c:forEach>            
+        </td>
         </tr>
         
         <tr>
